@@ -1,7 +1,7 @@
 site_name: Документация Конкрит
 site_dir: 'wiki/GENERIC/generic/build'
 site_url: https://bountyhanter.github.io/IKT2/
-repo_name: Мои репозитории
+repo_name: Репозитории разработчика
 repo_url: https://github.com/BountyHanter
 
 nav:
