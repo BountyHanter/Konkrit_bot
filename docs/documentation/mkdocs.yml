@@ -1,15 +1,9 @@
 site_name: Документация Конкрит
-
-#docs_dir: '/home/agate/GDprojects/godot/wiki/1_startGodot/startgodot/docs'
-
 site_dir: 'wiki/GENERIC/generic/build'
-
-repo_name: Гитхаб Разработчика
-
+site_url: https://bountyhanter.github.io/IKT2/
+repo_name: Мои репозитории
 repo_url: https://github.com/BountyHanter
 
-
-#site_url: https://example.com/
 nav:
   - 'Описание файлов кода':
     - bot.py: code-fiels/bot-py.md
@@ -68,7 +62,6 @@ markdown_extensions:
 plugins:
     - search
     - awesome-pages
-    - glightbox
     - tags:
 
 
