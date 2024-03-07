@@ -11,17 +11,17 @@ def start_buttons():
     builder.row(
         InlineKeyboardButton(
             text='Продажа бизнеса и поиск инвестиций',
-            callback_data = MyCallback(foo='sale_biz').pack())
+            callback_data=MyCallback(foo='sale_biz').pack())
     )
     builder.row(
         InlineKeyboardButton(
             text='Подбор инвест. проекта',
-            callback_data= MyCallback(foo='find_invest').pack())
+            callback_data=MyCallback(foo='find_invest').pack())
         )
     builder.row(
         InlineKeyboardButton(
             text='Строительство, проекты, дизайн',
-            callback_data= MyCallback(foo='bild_proj').pack()),
+            callback_data=MyCallback(foo='bild_proj').pack()),
         )
     builder.row(
         InlineKeyboardButton(
@@ -38,7 +38,13 @@ def sale_biz_find_invest_buttons():
     builder.row(
         InlineKeyboardButton(
             text='Узнать больше',
-            callback_data = MyCallback(foo='learn_more').pack())
+            callback_data=MyCallback(foo='learn_more').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text='Назад',
+            callback_data=MyCallback(foo='start').pack()
+        )
     )
 
     return builder.as_markup()
@@ -50,18 +56,25 @@ def sale_biz_learn_more_buttons():
     builder.row(
         InlineKeyboardButton(
             text='Мои обязательные условия',
-            callback_data = MyCallback(foo='my_condition').pack())
+            callback_data=MyCallback(foo='my_condition').pack())
     )
     builder.row(
         InlineKeyboardButton(
             text='Как я продаю готовые бизнесы',
-            callback_data = MyCallback(foo='how_i_sale_biz').pack())
+            callback_data=MyCallback(foo='how_i_sale_biz').pack())
     )
     builder.row(
         InlineKeyboardButton(
             text='Стоимость услуг',
-            callback_data = MyCallback(foo='service_price').pack())
+            callback_data=MyCallback(foo='service_price').pack())
     )
+    builder.row(
+        InlineKeyboardButton(
+            text='Назад',
+            callback_data=MyCallback(foo='sale_biz').pack()
+        )
+    )
+
 
     return builder.as_markup()
 
@@ -100,12 +113,18 @@ def take_inv_proj_buttons():
     builder.row(
         InlineKeyboardButton(
             text='Цены и условия работы',
-            callback_data = MyCallback(foo='price_condition').pack())
+            callback_data=MyCallback(foo='price_condition').pack())
     )
     builder.row(
         InlineKeyboardButton(
             text='Структура работы',
-            callback_data = MyCallback(foo='struct_work').pack())
+            callback_data=MyCallback(foo='struct_work').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text="Назад",
+            callback_data=MyCallback(foo='start').pack()
+        )
     )
 
     return builder.as_markup()
@@ -131,9 +150,10 @@ def build_proj_des_buttons():
         )
     builder.row(
         InlineKeyboardButton(
-            text='Отправить мой номер телефона',
-            callback_data=MyCallback(foo='my_phone').pack())
+            text='Назад',
+            callback_data=MyCallback(foo='start').pack()
         )
+    )
 
     return builder.as_markup()
 
@@ -190,10 +210,16 @@ def project_design_btns():
             text='9️⃣ Есть примеры работ по дизайну?',
             callback_data=MyCallback(foo='project_examples').pack())
         )
+    builder.row(
+        InlineKeyboardButton(
+            text='Назад',
+            callback_data=MyCallback(foo='bild_proj').pack()
+        )
+    )
 
     return builder.as_markup()
 
-
+# УДАЛИТЬ ЕСЛИ НЕ ПОПРОСЯТ ВЕРНУТЬ
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Сколько стоит проект?
 def proj_design_feedback_buttons():
     builder = InlineKeyboardBuilder()
@@ -207,11 +233,6 @@ def proj_design_feedback_buttons():
             text='Написать менеджеру',
             url=user_link)
         )
-    builder.row(
-        InlineKeyboardButton(
-            text='Отправить мой номер телефона',
-            callback_data=MyCallback(foo='my_phone').pack())
-        )
 
     return builder.as_markup()
 
@@ -219,11 +240,6 @@ def proj_design_feedback_buttons():
 # Старт >> Бизнес консультации
 def biz_consultation_buttons():
     builder = InlineKeyboardBuilder()
-    builder.row(
-        InlineKeyboardButton(
-            text='Отправить мой номер телефона',
-            callback_data=MyCallback(foo='my_phone').pack())
-        )
     builder.row(
         InlineKeyboardButton(
             text='Мои соц.сети',
@@ -239,18 +255,36 @@ def biz_consultation_buttons():
             text='Сколько стоят услуги',
             callback_data=MyCallback(foo='how_much_services').pack())
         )
+    builder.row(
+        InlineKeyboardButton(
+            text='Назад',
+            callback_data=MyCallback(foo='start').pack())
+    )
 
     return builder.as_markup()
 
 
-# Старт >> Бизнес консультации >> Кто я и чем могу быть полезен
-def who_i_am_buttons():
+# Юзер не в первый раз заполняет анкету
+def biz_consultation_answer_buttons():
     builder = InlineKeyboardBuilder()
     builder.row(
         InlineKeyboardButton(
-            text='Отправить мой номер телефона',
-            callback_data=MyCallback(foo='my_phone').pack())
+            text='Продолжить',
+            callback_data=MyCallback(foo='continue').pack())
+    )
+
+    return builder.as_markup()
+
+
+# Старт >> Бизнес консультации (удалить сообщение)
+def delete_message_buttons():
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        InlineKeyboardButton(
+            text='Назад',
+            callback_data=MyCallback(foo='delete_message').pack()
         )
+    )
 
     return builder.as_markup()
 

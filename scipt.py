@@ -1,7 +1,10 @@
 from bot_messages.bot_answer_text import who_i_am_text as gg
 
+"""
+Функция для экранирования символов
+"""
 
-def insert_backslashes(s, chars):
+def insert_backslashes(s, chars='-.!()'):
     result = ''
     for char in s:
         if char in chars:
@@ -12,4 +15,4 @@ def insert_backslashes(s, chars):
 
 
 if __name__ == '__main__':
-    print(insert_backslashes(gg, '-.!()'))
+    print(insert_backslashes(gg))

@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from aiogram.client.default import DefaultBotProperties
-from aiogram.enums import ContentType
+from aiogram.enums import ContentType, ChatType
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from dotenv import load_dotenv
@@ -12,10 +12,12 @@ from aiogram.filters import CommandStart, Command
 
 from bot_messages.bot_answer import start, construct_proj_design_start, construct, sale_biz_invest, take_invest_proj, \
     biz_consultation, sale_biz_learn_more, my_condition, how_i_sale_biz, service_price, price_condition, struct_work, \
-    where_office, where_look_product, which_quality, is_product, how_much_deliver, how_pay, project_design, \
+    where_office, where_look_product, which_quality, how_pay, project_design, \
     how_price_project, what_is_project, there_ready_variants, how_long, where_meeting, price_design, design_content, \
     how_long_design, project_examples, what_exactly_help, send_request, my_social_network, who_i_am, how_much_services, \
-    contact_handler, write_manager
+    contact_handler, write_manager, take_which_help_question, send_order_consultation, \
+    inline_start, delete_message, send_request_continue
+# order_consultation
 from bot_messages import bot_answer
 from bot_commands.commands import set_commands
 from callbacks.callback_filter import MyCallback
@@ -29,7 +31,7 @@ from bot_functions.tech_functions import start, cancel
 from utils.state.main_states import Bitrix
 """
 
-
+temp = '7162489758:AAH-shWAyMjGJMi91zee3AaiaAmKM_ZSyPs' # времянка
 # Анастасия 5416929197
 async def dev_message_startup(bot: Bot):
     await bot.send_message(977249859, 'Бот Конкрит запущен')
@@ -41,7 +43,7 @@ async def dev_message_shutdown(bot: Bot):
 
 async def start_bot():
     load_dotenv()
-    token = os.getenv('DEV_TOKEN')
+    token = os.getenv('TOKEN')
     bot = Bot(token=token, default=DefaultBotProperties(parse_mode='MarkdownV2'))
     await set_commands(bot)
     dp = Dispatcher()
@@ -52,6 +54,7 @@ async def start_bot():
 
     # Старт
     dp.message.register(start, CommandStart())  # CommandStart - Команда обрабатывающая команду /start
+    dp.callback_query.register(inline_start, MyCallback.filter(F.foo == 'start')) # Отработка по инлайн кнопке
 
     # Старт >> Продажа бизнеса и поиск инвестиций
     dp.callback_query.register(sale_biz_invest, MyCallback.filter(F.foo == 'sale_biz'))
@@ -90,12 +93,6 @@ async def start_bot():
 
     # Старт >> Строительство, проекты, дизайн >> Стройматериалы >> Где посмотреть товар?
     dp.callback_query.register(where_look_product, MyCallback.filter(F.foo == 'where_look_product'))
-
-    # Старт >> Строительство, проекты, дизайн >> Стройматериалы >> Есть ли товар в наличии, если нет сколько ждать
-    dp.callback_query.register(is_product, MyCallback.filter(F.foo == 'is_product'))
-
-    # Старт >> Строительство, проекты, дизайн >> Стройматериалы >> Сколько стоит доставка
-    dp.callback_query.register(how_much_deliver, MyCallback.filter(F.foo == 'how_much_deliver'))
 
     # Старт >> Строительство, проекты, дизайн >> Стройматериалы >> Качество товаров
     dp.callback_query.register(which_quality, MyCallback.filter(F.foo == 'which_quality'))
@@ -138,6 +135,7 @@ async def start_bot():
     dp.callback_query.register(biz_consultation, MyCallback.filter(F.foo == 'biz_cunsultation'))
     dp.message.register(what_exactly_help, MainState.field_activity)
     dp.message.register(send_request, MainState.which_help)
+    dp.callback_query.register(send_request_continue, MyCallback.filter(F.foo == 'continue')) # В случае если клиент заполнил анкету не первый раз
 
     # Старт >> Бизнес консультации >> Мои соц. Сети
     dp.callback_query.register(my_social_network, MyCallback.filter(F.foo == 'my_social_network'))
@@ -147,10 +145,16 @@ async def start_bot():
 
     # Старт >> Бизнес консультации >> Сколько стоят услуги
     dp.callback_query.register(how_much_services, MyCallback.filter(F.foo == 'how_much_services'))
+
+    # Старт >> Бизнес консультации (Удалить предыдущее сообщение)
+    dp.callback_query.register(delete_message, MyCallback.filter(F.foo == 'delete_message'))
     # _________________________________________________________________________________________________________________
 
     # Отправить номер телефона
     dp.message.register(contact_handler, F.contact)
+# Заказать консультацию
+    #dp.message.register(take_which_help_question, MainState.field_activity_question)
+    #dp.message.register(send_order_consultation, MainState.which_help_question)
 
     # Написать менеджеру
     dp.message.register(write_manager, F.text == 'Написать менеджеру')
