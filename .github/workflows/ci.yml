@@ -24,4 +24,4 @@ jobs:
         pip install mkdocs-awesome-pages-plugin
 
     - name: Build and deploy
-      run: mkdocs gh-deploy --force
+      run: docs/documentation/mkdocs gh-deploy --force
