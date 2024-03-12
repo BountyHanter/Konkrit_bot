@@ -2,37 +2,26 @@ import asyncio
 import os
 
 from aiogram.client.default import DefaultBotProperties
-from aiogram.enums import ContentType, ChatType
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
 from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import CommandStart
 
 from bot_messages.bot_answer import start, construct_proj_design_start, construct, sale_biz_invest, take_invest_proj, \
     biz_consultation, sale_biz_learn_more, my_condition, how_i_sale_biz, service_price, price_condition, struct_work, \
     where_office, where_look_product, which_quality, how_pay, project_design, \
     how_price_project, what_is_project, there_ready_variants, how_long, where_meeting, price_design, design_content, \
-    how_long_design, project_examples, what_exactly_help, send_request, my_social_network, who_i_am, how_much_services, \
-    contact_handler, write_manager, take_which_help_question, send_order_consultation, \
-    inline_start, delete_message, send_request_continue
-# order_consultation
+    how_long_design, what_exactly_help, send_request, my_social_network, who_i_am,contact_handler, \
+    write_manager, inline_start, delete_message, send_request_continue
+
 from bot_messages import bot_answer
 from bot_commands.commands import set_commands
 from callbacks.callback_filter import MyCallback
 from utils.states.main_state import MainState
 from utils.tech_function import bot_logger
 
-"""
-from utils.callbacks.bot_callbacks import start_bitrix, add_comment_to_discus, not_comment, new_link
-from utils.callbacks.callback_class_filter import MyCallback
-from bot_functions.tech_functions import start, cancel
-from utils.state.main_states import Bitrix
-"""
-
 temp = '7162489758:AAH-shWAyMjGJMi91zee3AaiaAmKM_ZSyPs' # времянка
-# Анастасия 5416929197
+
 async def dev_message_startup(bot: Bot):
     await bot.send_message(977249859, 'Бот Конкрит запущен')
 
@@ -126,9 +115,6 @@ async def start_bot():
 
     # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Есть ли готовые варианты проектов?
     dp.callback_query.register(there_ready_variants, MyCallback.filter(F.foo == 'there_ready_variants'))
-
-    # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Есть примеры работ по дизайну?
-    dp.callback_query.register(project_examples, MyCallback.filter(F.foo == 'project_examples'))
     # _________________________________________________________________________________________________________________
 
     # Старт >> Бизнес консультации
@@ -142,9 +128,6 @@ async def start_bot():
 
     # Старт >> Бизнес консультации >> Кто я и чем могу быть полезен
     dp.callback_query.register(who_i_am, MyCallback.filter(F.foo == 'who_i_am'))
-
-    # Старт >> Бизнес консультации >> Сколько стоят услуги
-    dp.callback_query.register(how_much_services, MyCallback.filter(F.foo == 'how_much_services'))
 
     # Старт >> Бизнес консультации (Удалить предыдущее сообщение)
     dp.callback_query.register(delete_message, MyCallback.filter(F.foo == 'delete_message'))

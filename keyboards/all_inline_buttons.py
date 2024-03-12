@@ -207,11 +207,6 @@ def project_design_btns():
         )
     builder.row(
         InlineKeyboardButton(
-            text='9️⃣ Есть примеры работ по дизайну?',
-            callback_data=MyCallback(foo='project_examples').pack())
-        )
-    builder.row(
-        InlineKeyboardButton(
             text='Назад',
             callback_data=MyCallback(foo='bild_proj').pack()
         )
@@ -249,11 +244,6 @@ def biz_consultation_buttons():
         InlineKeyboardButton(
             text='Кто я и чем могу быть полезен',
             callback_data=MyCallback(foo='who_i_am').pack())
-        )
-    builder.row(
-        InlineKeyboardButton(
-            text='Сколько стоят услуги',
-            callback_data=MyCallback(foo='how_much_services').pack())
         )
     builder.row(
         InlineKeyboardButton(

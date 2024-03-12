@@ -1,4 +1,4 @@
-from bot_messages.bot_answer_text import who_i_am_text as gg
+from bot_messages.bot_answer_text import send_request_text as gg
 
 """
 Функция для экранирования символов

@@ -5,7 +5,7 @@ import time
 from aiogram import Bot
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery, InputFile, FSInputFile, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import Message, CallbackQuery, FSInputFile
 
 from bot_messages.bot_answer_text import const_proj_des_starttext1, const_proj_des_starttext2, start_text1, \
     start_text2, construct_text, sale_biz_invest_text1, sale_biz_invest_text2, take_invest_proj2, take_invest_proj1, \
@@ -13,14 +13,14 @@ from bot_messages.bot_answer_text import const_proj_des_starttext1, const_proj_d
     service_price_text, price_condition_text, struct_work_text, where_office_text, where_look_product_text, \
     which_quality_text, how_pay_text, project_design_text, \
     how_price_project_text, feedback_text, what_is_project_text, there_ready_variants_text, how_long_text, \
-    where_meeting_text, price_design_text, design_content_text, how_long_design_text, project_examples_text, \
-    send_request_text, my_social_network_text, who_i_am_text, how_much_services_text
-from client_actions.client_actions import actions
+    where_meeting_text, price_design_text, design_content_text, how_long_design_text, \
+    send_request_text, my_social_network_text, who_i_am_text
+# from client_actions.client_actions import actions
 from keyboards.buttons import new_user_kb, user_kb
 from keyboards.all_inline_buttons import start_buttons, build_proj_des_buttons, sale_biz_find_invest_buttons, \
     take_inv_proj_buttons, \
     sale_biz_learn_more_buttons, my_conslusion_back_buttons, how_i_sale_biz_buttons, project_design_btns, \
-    proj_design_feedback_buttons, biz_consultation_buttons, delete_message_buttons, \
+    biz_consultation_buttons, delete_message_buttons, \
     biz_consultation_answer_buttons
 from keyboards import construct_inline_buttons as const_btns
 from scipt import insert_backslashes
@@ -48,7 +48,6 @@ async def start(message: Message, bot: Bot, state: FSMContext):
         await state.clear()
         photo = FSInputFile(r'data/vadim.jpeg')
         await bot.send_photo(message.chat.id, photo=photo, caption=start_text1, reply_markup=user_kb)
-        #await message.answer(start_text1, reply_markup=main_kb)  # Отправляем первое сообщение с клавиатурой
         await message.answer(start_text2, reply_markup=start_buttons())  # Отправляем второе с inline клавиатурой
         # actions("Старт", message.from_user.id)
 
@@ -120,6 +119,7 @@ async def service_price(query: CallbackQuery, bot: Bot):
 
 # Старт >> Подбор инвест. проекта
 async def take_invest_proj(query: CallbackQuery, bot: Bot):
+    await query.answer()
     await bot.edit_message_reply_markup(query.from_user.id, query.message.message_id)  # удаляем кнопку
     await query.message.answer(take_invest_proj1)
     document = FSInputFile(r'bot_logs.json', filename='Имя файла')
@@ -132,6 +132,7 @@ async def take_invest_proj(query: CallbackQuery, bot: Bot):
 
 # Старт >> Подбор инвест. проекта >> Цены и условия работы
 async def price_condition(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(price_condition_text, reply_markup=delete_message_buttons())  # не удаляем кнопки выше так как текст маленький
     #actions("Старт >> Подбор инвест. проекта >> Цены и условия работы",
           #  query.from_user.id)
@@ -139,9 +140,10 @@ async def price_condition(query: CallbackQuery):
 
 # Старт >> Подбор инвест. проекта >> Структура работы
 async def struct_work(query: CallbackQuery, bot: Bot):
+    await query.answer()
     await query.message.answer(struct_work_text, reply_markup=delete_message_buttons())
 
-
+#_______________________________________________________________________________________________________________________
 # Старт >> Строительство, проекты, дизайн
 async def construct_proj_design_start(query: CallbackQuery, bot: Bot):
     """
@@ -193,53 +195,57 @@ async def how_pay(query: CallbackQuery, bot: Bot):
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера
 async def project_design(query: CallbackQuery, bot: Bot):
+    await query.answer()
     await bot.edit_message_reply_markup(query.from_user.id, query.message.message_id)  # удаляем кнопку
     await query.message.answer(project_design_text, reply_markup=project_design_btns())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Сколько стоит проект?
 async def how_price_project(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(how_price_project_text+feedback_text, reply_markup=delete_message_buttons()) # Здесь так же удаляем текст так как не стоит каждый раз выводить весь текст предыдущего сообщения заного, кнопки не удаляем
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Из чего состоит проект?
 async def what_is_project(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(what_is_project_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Есть ли готовые варианты проектов?
 async def there_ready_variants(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(there_ready_variants_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Как долго делается?
 async def how_long(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(how_long_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Где встретиться переговорить?
 async def where_meeting(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(where_meeting_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Сколько стоит дизайн?
 async def price_design(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(price_design_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Из чего состоит дизайн?
 async def design_content(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(design_content_text+feedback_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Как долго делается дизайн?
 async def how_long_design(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(how_long_design_text+feedback_text, reply_markup=delete_message_buttons())
-
-
-# Старт >> Строительство, проекты, дизайн >> Проектирование и дизайн интерьера >> Есть примеры работ по дизайну?
-async def project_examples(query: CallbackQuery):
-    await query.message.answer(project_examples_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Бизнес консультации
@@ -302,7 +308,7 @@ async def send_request(message: Message, state: FSMContext):
     info.which_help = get_data.get('which_help')
     await state.update_data(info=info)  # обновляем info в state
     await message.answer(f"Это сфера деятельности \- {info.field_activity}, а это с чем нужна помощь \- {info.which_help}"
-                         f"Спасибо что ответили на вопросы", reply_markup=new_user_kb)
+                         f"Спасибо за ваш ответ\.", reply_markup=new_user_kb)
     await state.clear()
     send_data_to_cache(user_id=message.from_user.id, sphere_activity=info.field_activity, what_help_need=info.which_help)
     await message.answer(send_request_text, reply_markup=biz_consultation_buttons())
@@ -316,17 +322,14 @@ async def send_request_continue(query: CallbackQuery, bot: Bot):
 
 # Старт >> Бизнес консультации >> Мои соц. Сети
 async def my_social_network(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(my_social_network_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Бизнес консультации >> Кто я и чем могу быть полезен
 async def who_i_am(query: CallbackQuery):
+    await query.answer()
     await query.message.answer(who_i_am_text, reply_markup=delete_message_buttons())
-
-
-# Старт >> Бизнес консультации >> Сколько стоят услуги
-async def how_much_services(query: CallbackQuery):
-    await query.message.answer(how_much_services_text, reply_markup=delete_message_buttons())
 
 
 # Старт >> Бизнес консультации (удалить сообщение)
@@ -360,7 +363,7 @@ async def contact_handler(message: Message, bot: Bot):
 
 # Написать менеджеру
 async def write_manager(message: Message):
-    await message.answer('Хорошо, вот контакты менеджера \- \@Vadim\_Kiri')
+    await message.answer('Хорошо, вот контакты менеджера \- \@HelperCompBot')
 """
 # Порешать проблему когда чел уже заказывал консультацию он жмёт еще раз заказать консультацию и его пересылает в эту функцию а должно пересылать в send_order_consultation
 # Заказать консультацию

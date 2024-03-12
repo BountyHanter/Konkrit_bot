@@ -1,1 +1,1 @@
-user_link = "https://t.me/Vadim_Kiri"
+user_link = "https://t.me/HelperCompBot"
