@@ -20,7 +20,6 @@ from callbacks.callback_filter import MyCallback
 from utils.states.main_state import MainState
 from utils.tech_function import bot_logger
 
-temp = '7162489758:AAH-shWAyMjGJMi91zee3AaiaAmKM_ZSyPs' # времянка
 
 async def dev_message_startup(bot: Bot):
     await bot.send_message(977249859, 'Бот Конкрит запущен')
@@ -32,14 +31,14 @@ async def dev_message_shutdown(bot: Bot):
 
 async def start_bot():
     load_dotenv()
-    token = os.getenv('TOKEN')
+    token = os.getenv('DEV_TOKEN')
     bot = Bot(token=token, default=DefaultBotProperties(parse_mode='MarkdownV2'))
     await set_commands(bot)
     dp = Dispatcher()
     loger = bot_logger.bot_logger()
     # Уведомления разработчику о включении и выключении бота
-    # dp.startup.register(dev_message_startup)
-    # dp.shutdown.register(dev_message_shutdown)
+    dp.startup.register(dev_message_startup)
+    dp.shutdown.register(dev_message_shutdown)
 
     # Старт
     dp.message.register(start, CommandStart())  # CommandStart - Команда обрабатывающая команду /start
@@ -135,9 +134,6 @@ async def start_bot():
 
     # Отправить номер телефона
     dp.message.register(contact_handler, F.contact)
-# Заказать консультацию
-    #dp.message.register(take_which_help_question, MainState.field_activity_question)
-    #dp.message.register(send_order_consultation, MainState.which_help_question)
 
     # Написать менеджеру
     dp.message.register(write_manager, F.text == 'Написать менеджеру')
