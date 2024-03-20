@@ -1,3 +1,0 @@
-"2024-03-20 02:28:26,878 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal"
-"2024-03-20 02:28:26,879 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @denis14101999_first_bot id=6249292999 - 'Billy_bot'"
-"2024-03-20 02:28:26,880 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped"

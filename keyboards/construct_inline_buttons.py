@@ -32,6 +32,11 @@ def start_construct():
     )
     builder.row(
         InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
             text='Назад',
             callback_data=MyCallback(foo='bild_proj').pack()
         )

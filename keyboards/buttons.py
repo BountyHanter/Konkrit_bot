@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 new_user_kb = ReplyKeyboardMarkup(
     keyboard=[
@@ -8,7 +8,7 @@ new_user_kb = ReplyKeyboardMarkup(
     resize_keyboard=True,
     one_time_keyboard=True,
 )
-
+remove_kb = ReplyKeyboardRemove()
 user_kb = ReplyKeyboardMarkup(
     keyboard=[
         [

@@ -17,15 +17,14 @@ from bot_messages.bot_answer_text import const_proj_des_starttext1, const_proj_d
     which_quality_text, how_pay_text, project_design_text, \
     how_price_project_text, feedback_text, what_is_project_text, there_ready_variants_text, how_long_text, \
     where_meeting_text, price_design_text, design_content_text, how_long_design_text, \
-    send_request_text, my_social_network_text, who_i_am_text
+    send_request_text, my_social_network_text, who_i_am_text, consultation_text, send_phone_text
 from client_actions.client_actions import actions
-# from client_actions.client_actions import actions
-from keyboards.buttons import new_user_kb, user_kb
+from keyboards.buttons import new_user_kb, user_kb, remove_kb
 from keyboards.all_inline_buttons import start_buttons, build_proj_des_buttons, sale_biz_find_invest_buttons, \
     take_inv_proj_buttons, \
-    sale_biz_learn_more_buttons, my_conslusion_back_buttons, how_i_sale_biz_buttons, project_design_btns, \
+    sale_biz_learn_more_buttons, my_conslusion_back_buttons, project_design_btns, \
     biz_consultation_buttons, delete_message_buttons, \
-    biz_consultation_answer_buttons
+    biz_consultation_answer_buttons, send_phone
 from keyboards import construct_inline_buttons as const_btns
 from scipt import insert_backslashes
 from utils.states.class_for_state import Info
@@ -51,7 +50,7 @@ async def start(message: Message, bot: Bot, state: FSMContext):
     if message.chat.type == 'private': # Чтобы бот не отвечал в группе\чате
         await state.clear()
         photo = FSInputFile(r'data/vadim.jpeg')
-        await bot.send_photo(message.chat.id, photo=photo, caption=start_text1, reply_markup=user_kb)
+        await bot.send_photo(message.chat.id, photo=photo, caption=start_text1, reply_markup=remove_kb)
         await message.answer(start_text2, reply_markup=start_buttons())  # Отправляем второе с inline клавиатурой
         actions("Старт", message.from_user.id)
 
@@ -106,7 +105,7 @@ async def my_condition(query: CallbackQuery, bot: Bot):
 # Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Как я продаю готовые бизнесы
 async def how_i_sale_biz(query: CallbackQuery, bot: Bot):
     await bot.edit_message_reply_markup(query.from_user.id, query.message.message_id)  # удаляем кнопку
-    await query.message.answer(how_i_sale_text, reply_markup=how_i_sale_biz_buttons())
+    await query.message.answer(how_i_sale_text, reply_markup=my_conslusion_back_buttons())
     actions("Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Как я продаю готовые бизнесы",
             query.from_user.id)
 
@@ -114,7 +113,7 @@ async def how_i_sale_biz(query: CallbackQuery, bot: Bot):
 # Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Стоимость услуг
 async def service_price(query: CallbackQuery, bot: Bot):
     await bot.edit_message_reply_markup(query.from_user.id, query.message.message_id)  # удаляем кнопку
-    await query.message.answer(service_price_text, reply_markup=how_i_sale_biz_buttons())
+    await query.message.answer(service_price_text, reply_markup=my_conslusion_back_buttons())
     actions("Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Стоимость услуг",
             query.from_user.id)
 
@@ -336,8 +335,7 @@ async def send_request(message: Message, state: FSMContext):
     info = get_data.get('info')
     info.which_help = get_data.get('which_help')
     await state.update_data(info=info)  # обновляем info в state
-    await message.answer(f"Это сфера деятельности \- {info.field_activity}, а это с чем нужна помощь \- {info.which_help}"
-                         f"Спасибо за ваш ответ\.", reply_markup=new_user_kb)
+    await message.answer(f"Спасибо за ваш ответ\.", reply_markup=new_user_kb)
     await state.clear()
     send_data_to_cache(user_id=message.from_user.id, sphere_activity=info.field_activity, what_help_need=info.which_help)
     await message.answer(send_request_text, reply_markup=biz_consultation_buttons())
@@ -384,32 +382,31 @@ async def contact_handler(message: Message, bot: Bot):
             data = json.load(file)
             for i, key in enumerate(data):
                 if key['user_id'] == message.from_user.id:
-                    if key['what_help_need'] is not None:
-                        # Создаём контакт в битрикс
-                        contact = NewContact(str(message.from_user.id), phone_number)
-                        respond_contact_id = contact.send_request()
-                        if respond_contact_id is None:
-                            await message.answer('Произошла ошибка создания контакта')
-                            return
-                        # Создаём сделку в битрикс
-                        deal = NewDeal(f"Сфера деятельности - {key['sphere_activity']}\n"
-                                       f"С чем нужна помощь - {key['what_help_need']}", respond_contact_id)
-                        deal_respond = deal.send_request()
-                        if deal_respond is None:
-                            await message.answer('Произошла ошибка создания сделки')
-                            return
-                        # Получаем историю действий
-                        data = load_data(message.from_user.id)
-                        pre_history = data['actions']
-                        # Такое действие нужно чтобы каждый элемент начинался с новой строки
-                        history = '\n'.join(pre_history)
-                        # бреём первый элемент так как в первом элементе deal_respond содержится id сделки
-                        comment = AddComment(history, deal_respond[0])
-                        final_respond = comment.send_request()
-                        if final_respond is None:
-                            await message.answer('Не удалось добавить комментарий')
-                        await message.answer("Отлично, ваш номер получен, заявка отправлена", reply_markup=user_kb)
+                    # Создаём контакт в битрикс
+                    contact = NewContact(str(message.from_user.id), phone_number)
+                    respond_contact_id = contact.send_request()
+                    if respond_contact_id is None:
+                        await message.answer('Произошла ошибка создания контакта')
                         return
+                    # Создаём сделку в битрикс
+                    deal = NewDeal(f"Сфера деятельности - {key['sphere_activity']}\n"
+                                   f"С чем нужна помощь - {key['what_help_need']}", respond_contact_id)
+                    deal_respond = deal.send_request()
+                    if deal_respond is None:
+                        await message.answer('Произошла ошибка создания сделки')
+                        return
+                    # Получаем историю действий
+                    data = load_data(message.from_user.id)
+                    pre_history = data['actions']
+                    # Такое действие нужно чтобы каждый элемент начинался с новой строки
+                    history = '\n'.join(pre_history)
+                    # бреём первый элемент так как в первом элементе deal_respond содержится id сделки
+                    comment = AddComment(history, deal_respond[0])
+                    final_respond = comment.send_request()
+                    if final_respond is None:
+                        await message.answer('Не удалось добавить комментарий')
+                    await message.answer(send_phone_text, reply_markup=send_phone())
+                    return
     else:
         await message.answer("Простите, бот не смог получить ваш номер телефона, обратитесь к администрации\. Не удаляйте переписку с ботом")
 
@@ -483,6 +480,12 @@ def send_data_to_cache(*, user_id=None, telephone_number=None, sphere_activity=N
     # Сохраняем обновленные данные обратно в файл
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
+
+
+# Консультация
+async def consultation(query: CallbackQuery, bot: Bot):
+    await bot.edit_message_reply_markup(query.from_user.id, query.message.message_id)  # удаляем кнопку
+    await query.message.answer(consultation_text, reply_markup=new_user_kb)
 
 
 def load_data(tg_id):

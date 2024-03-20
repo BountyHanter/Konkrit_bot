@@ -11,8 +11,8 @@ from bot_messages.bot_answer import start, construct_proj_design_start, construc
     biz_consultation, sale_biz_learn_more, my_condition, how_i_sale_biz, service_price, price_condition, struct_work, \
     where_office, where_look_product, which_quality, how_pay, project_design, \
     how_price_project, what_is_project, there_ready_variants, how_long, where_meeting, price_design, design_content, \
-    how_long_design, what_exactly_help, send_request, my_social_network, who_i_am,contact_handler, \
-    write_manager, inline_start, delete_message, send_request_continue
+    how_long_design, what_exactly_help, send_request, my_social_network, who_i_am, contact_handler, \
+    write_manager, inline_start, delete_message, send_request_continue, consultation
 
 from bot_messages import bot_answer
 from bot_commands.commands import set_commands
@@ -137,6 +137,9 @@ async def start_bot():
 
     # Написать менеджеру
     dp.message.register(write_manager, F.text == 'Написать менеджеру')
+
+    # Консультация
+    dp.callback_query.register(consultation, MyCallback.filter(F.foo == 'consultation'))
 
     # Сообщение без контекста
     dp.message.register(bot_answer.say_something)

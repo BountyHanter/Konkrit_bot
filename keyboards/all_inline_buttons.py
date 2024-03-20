@@ -70,6 +70,11 @@ def sale_biz_learn_more_buttons():
     )
     builder.row(
         InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
             text='Назад',
             callback_data=MyCallback(foo='sale_biz').pack()
         )
@@ -84,27 +89,16 @@ def my_conslusion_back_buttons():
     builder = InlineKeyboardBuilder()
     builder.row(
         InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
             text='Назад',
             callback_data = MyCallback(foo='learn_more').pack())
     )
 
     return builder.as_markup()
-
-
-# Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Как я продаю готовые бизнесы
-def how_i_sale_biz_buttons():
-    builder = InlineKeyboardBuilder()
-    builder.row(
-        InlineKeyboardButton(
-            text='Назад',
-            callback_data=MyCallback(foo='learn_more').pack())
-    )
-
-    return builder.as_markup()
-
-
-# Старт >> Продажа бизнеса и поиск инвестиций >> Узнать больше >> Стоимость услуг
-# (кнопка не нужна так как текст маленький)
 
 
 # Старт >> Подбор инвест. проекта
@@ -119,6 +113,11 @@ def take_inv_proj_buttons():
         InlineKeyboardButton(
             text='Структура работы',
             callback_data=MyCallback(foo='struct_work').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
     )
     builder.row(
         InlineKeyboardButton(
@@ -145,9 +144,9 @@ def build_proj_des_buttons():
         )
     builder.row(
         InlineKeyboardButton(
-            text='Написать менеджеру',
-            url=user_link)
-        )
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
     builder.row(
         InlineKeyboardButton(
             text='Назад',
@@ -247,6 +246,11 @@ def biz_consultation_buttons():
         )
     builder.row(
         InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
+    builder.row(
+        InlineKeyboardButton(
             text='Назад',
             callback_data=MyCallback(foo='start').pack())
     )
@@ -273,6 +277,24 @@ def delete_message_buttons():
         InlineKeyboardButton(
             text='Назад',
             callback_data=MyCallback(foo='delete_message').pack()
+        )
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text='Консультация',
+            callback_data=MyCallback(foo='consultation').pack())
+    )
+
+    return builder.as_markup()
+
+
+# Отправить номер телефона
+def send_phone():
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        InlineKeyboardButton(
+            text='Телеграм канал',
+            url='https://web.telegram.org/k/#@concretov19'
         )
     )
 
